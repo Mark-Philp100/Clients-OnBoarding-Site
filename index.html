@@ -1,19 +1,61 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#0b1220" />
-    <meta name="description" content="Client onboarding portal for stackEnd Technological Solutions" />
-    <title>Client Onboarding | stackEnd</title>
-  </head>
-  <body>
-    <div id="root">
-      <main style="min-height:100vh;display:grid;place-items:center;padding:24px;font-family:system-ui,sans-serif;color:#172033;background:#f7f8fa">
-        <div style="text-align:center"><strong>Opening stackEnd onboarding…</strong><p style="color:#687289">If this message remains, start the site with <code>npm.cmd run dev</code> and open the local URL shown in the terminal.</p></div>
-      </main>
-    </div>
-    <noscript>This onboarding portal requires JavaScript to be enabled.</noscript>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Client onboarding portal for stackEnd Technological Solutions">
+  <title>Client Onboarding | stackEnd</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="welcome" class="page page--active">
+    <header class="topbar wrap">
+      <a class="brand" href="#home"><span class="brand__mark">S</span><span>stack<em>End</em></span></a>
+      <div class="topbar__action"><span>Already started?</span><button class="button button--outline" data-open-wizard>Resume onboarding</button></div>
+    </header>
+    <main>
+      <section class="hero wrap">
+        <div class="hero__copy">
+          <p class="eyebrow">✦ A thoughtful start to our partnership</p>
+          <h1>Let’s build something <em>great</em> together.</h1>
+          <p class="hero__lead">Share the context behind your business and project so our team can turn the first conversation into meaningful progress.</p>
+          <div class="hero__actions"><button class="button button--primary button--large" data-open-wizard>Get started →</button><span>◷ Usually takes about 8–12 minutes</span></div>
+          <div class="trust"><b>✓</b><p><strong>Designed with your privacy in mind.</strong>Your draft stays in this browser during the prototype.</p></div>
+        </div>
+        <div class="hero__visual">
+          <div class="orb"></div><div class="float-tag float-tag--top">✓ Progress saved</div>
+          <article class="preview-card"><header><span>Client onboarding</span><small>01 / 03</small></header><h2>A clear brief makes better work possible.</h2><div class="mini-step active"><b>1</b><div><strong>Choose your services</strong><i></i></div></div><div class="mini-step"><b>2</b><div><strong>Share your context</strong><i></i></div></div><div class="mini-step"><b>3</b><div><strong>Review your brief</strong><i></i></div></div><button data-open-wizard>Continue →</button></article>
+          <div class="float-tag float-tag--bottom">⌾ Private by design</div>
+        </div>
+      </section>
+      <section class="process"><div class="wrap"><div class="process__intro"><div><p class="eyebrow">Simple by design</p><h2>Three steps. One strong foundation.</h2></div><p>No technical knowledge needed. Answer in your own words and we’ll handle the complexity during discovery.</p></div><div class="process__grid"><article><span>01</span><h3>Choose your services</h3><p>Select everything included in your stackEnd engagement.</p></article><article><span>02</span><h3>Tell us about your business</h3><p>Share your goals, audience, requirements and references.</p></article><article><span>03</span><h3>Review your information</h3><p>Make changes, confirm the details and complete the brief.</p></article></div></div></section>
+    </main>
+    <footer class="footer"><div class="wrap"><a class="brand brand--light" href="#home"><span class="brand__mark">S</span><span>stack<em>End</em></span></a><p>Technology that moves your business forward.</p><a href="mailto:hello@stackend.example">hello@stackend.example</a></div></footer>
+  </div>
+
+  <div id="wizard" class="page" aria-hidden="true">
+    <aside class="sidebar"><a class="brand brand--light" href="#home" data-go-home><span class="brand__mark">S</span><span>stack<em>End</em></span></a><div class="sidebar__intro"><p>Client onboarding</p><h2>Tell us what you’re building.</h2><span>Your answers help our team prepare a more focused discovery process.</span></div><ol class="stepper"><li class="is-active"><b>1</b><div><strong>Business details</strong><small>The essentials</small></div></li><li><b>2</b><div><strong>Select services</strong><small>Choose your path</small></div></li><li><b>3</b><div><strong>Project requirements</strong><small>Share the details</small></div></li><li><b>4</b><div><strong>Review &amp; confirm</strong><small>Final check</small></div></li></ol><p class="sidebar__foot">⌾ <span>Saved locally<br><small>No data is transmitted</small></span></p></aside>
+    <main class="wizard-main">
+      <header class="wizard-bar"><button class="mobile-brand" data-go-home><span class="brand__mark">S</span> stackEnd</button><span id="save-status">✓ Progress saved locally</span><button id="restart-button">↻ Restart</button></header><div class="mobile-progress"><i id="mobile-progress-bar"></i></div>
+      <form id="onboarding-form" novalidate>
+        <section class="form-step is-active" data-step="0">
+          <div class="section-title"><p>Step 1 · About you</p><h1>Let’s start with the essentials</h1><span>Tell us who we’re working with and give us a little context about your business.</span></div>
+          <div class="form-card"><header class="card-title"><b>01</b><div><h2>Contact information</h2><p>We’ll use these details for onboarding communication only.</p></div></header><div class="form-grid"><label class="field"><span>Your full name <em>Required</em></span><input name="fullName" autocomplete="name" placeholder="e.g. Amina Nansubuga" required></label><label class="field"><span>Business or organization <em>Required</em></span><input name="businessName" placeholder="e.g. Kawa Studio" required></label><label class="field"><span>Email address <em>Required</em></span><input name="email" type="email" placeholder="you@business.com" required></label><label class="field"><span>Phone number <em>Required</em></span><input name="phone" type="tel" value="+256 " required></label><label class="field"><span>Business location <em>Required</em></span><input name="location" placeholder="City, country" required></label><label class="field"><span>Preferred communication <em>Required</em></span><select name="communication" required><option value="">Choose a channel</option><option>Email</option><option>Phone call</option><option>WhatsApp</option><option>Video call</option></select></label></div></div>
+          <div class="form-card"><header class="card-title"><b>02</b><div><h2>Business snapshot</h2><p>A concise overview helps us arrive prepared.</p></div></header><div class="form-grid"><label class="field"><span>Industry or category <em>Required</em></span><input name="industry" placeholder="e.g. Hospitality, retail, non-profit" required></label><label class="field"><span>Website URL <small>Optional</small></span><input name="website" type="url" placeholder="https://"></label><label class="field field--wide"><span>What does your business do? <em>Required</em></span><textarea name="description" placeholder="Describe your products, services and what makes the business distinct." required></textarea></label><label class="field"><span>Who is your target audience? <em>Required</em></span><textarea name="audience" required></textarea></label><label class="field"><span>What are your main goals? <em>Required</em></span><textarea name="goals" required></textarea></label></div></div>
+        </section>
+        <section class="form-step" data-step="1"><div class="section-title"><p>Step 2 · Services</p><h1>How can we help?</h1><span>Select one or more services. Your choices shape the next part of the brief.</span></div><div id="service-error" class="error-banner" hidden>Please select at least one service to continue.</div><div class="service-grid"><button type="button" class="service-card" data-service="Social Media Management"><span>01</span><i>◎</i><h2>Social Media Management</h2><p>Strategy, publishing and community growth across the platforms that matter.</p><strong>○ Select service</strong></button><button type="button" class="service-card" data-service="Content & Digital Marketing"><span>02</span><i>◫</i><h2>Content &amp; Digital Marketing</h2><p>Campaign-ready video, photography, graphics and digital storytelling.</p><strong>○ Select service</strong></button><button type="button" class="service-card" data-service="Website Development"><span>03</span><i>▣</i><h2>Website Development</h2><p>Responsive, conversion-focused websites and web experiences.</p><strong>○ Select service</strong></button><button type="button" class="service-card" data-service="Software & Custom Solutions"><span>04</span><i>◇</i><h2>Software &amp; Custom Solutions</h2><p>Purpose-built applications, automation and business systems.</p><strong>○ Select service</strong></button></div><div class="info-note"><b>i</b><p><strong>Select everything that applies.</strong><span>You can change your selection before submitting.</span></p></div></section>
+        <section class="form-step" data-step="2"><div class="section-title"><p>Step 3 · Project details</p><h1>Tell us what success looks like</h1><span>Focus on the business outcome. Technical decisions can come later.</span></div><div class="selected-services" id="selected-services"></div><div class="form-card"><header class="card-title"><b>01</b><div><h2>Project direction</h2><p>The purpose, audience and priorities behind this work.</p></div></header><div class="form-grid"><label class="field field--wide"><span>Describe the project <em>Required</em></span><textarea name="project" placeholder="What are you looking to create or improve?" required></textarea></label><label class="field"><span>Primary objective <em>Required</em></span><select name="objective" required><option value="">Choose an objective</option><option>Increase visibility</option><option>Generate leads or sales</option><option>Improve customer experience</option><option>Streamline operations</option><option>Launch something new</option></select></label><label class="field"><span>Preferred timeline <em>Required</em></span><select name="timeline" required><option value="">Choose a timeframe</option><option>As soon as possible</option><option>Within 1 month</option><option>1–3 months</option><option>3–6 months</option><option>Flexible / not sure</option></select></label><label class="field field--wide"><span>Must-have requirements <em>Required</em></span><textarea name="requirements" required></textarea></label><label class="field"><span>Budget range <small>Optional</small></span><select name="budget"><option value="">Prefer not to say yet</option><option>Under UGX 2M</option><option>UGX 2M–5M</option><option>UGX 5M–10M</option><option>UGX 10M+</option></select></label><label class="field"><span>Reference links <small>Optional</small></span><input name="references" placeholder="Websites or examples you like"></label><label class="field field--wide"><span>Anything else we should know? <small>Optional</small></span><textarea name="notes"></textarea></label><label class="upload field--wide"><span>Reference files <small>Optional</small></span><input id="files" type="file" multiple><span class="upload__box"><b>⇧</b><strong>Choose files to attach</strong><small>PNG, JPG, PDF or DOCX · up to 10 MB each</small></span><span id="file-list" class="file-list"></span></label></div></div></section>
+        <section class="form-step" data-step="3"><div class="section-title"><p>Step 4 · Final check</p><h1>Review your onboarding brief</h1><span>Make sure everything looks right before completing this prototype.</span></div><div id="review-content" class="review-stack"></div><label class="confirm-box"><input id="confirm" type="checkbox"><span><strong>I confirm these details are accurate.</strong><small>This layout prototype saves information only in this browser.</small></span></label><div id="confirm-error" class="error-banner" hidden>Please confirm the information before completing.</div></section>
+        <footer class="form-actions"><button type="button" id="back-button" class="button button--outline">Back</button><button type="button" id="next-button" class="button button--primary">Save &amp; continue →</button></footer>
+      </form>
+    </main>
+  </div>
+
+  <div id="success" class="page" aria-hidden="true"><header class="success-header"><a class="brand" href="#home" data-go-home><span class="brand__mark">S</span><span>stack<em>End</em></span></a></header><main class="success-card"><span class="success-icon">✓</span><p class="eyebrow">Onboarding complete</p><h1>Your brief is ready.</h1><p id="success-message">Your onboarding summary has been saved in this browser.</p><div class="reference"><span>Prototype reference</span><strong id="reference-number">STK-0000</strong><small>Use this reference during the walkthrough.</small></div><div id="success-services" class="success-services"></div><div class="next-note"><strong>What happens next</strong><p>Once a backend is connected, the stackEnd team can receive this brief, review open questions and arrange a discovery session.</p></div><div class="success-actions"><button class="button button--outline" id="print-button">Print summary</button><button class="button button--primary" id="view-summary">View summary</button></div><button class="text-button" data-go-home>← Return to welcome page</button></main></div>
+  <div id="restart-modal" class="modal" hidden><div class="modal__card" role="dialog" aria-modal="true"><span>!</span><h2>Restart onboarding?</h2><p>This clears all locally saved answers and selected files.</p><div><button class="button button--outline" id="cancel-restart">Keep my progress</button><button class="button button--danger" id="confirm-restart">Clear and restart</button></div></div></div>
+  <script src="app.js"></script>
+</body>
 </html>
