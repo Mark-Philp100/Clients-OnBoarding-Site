@@ -16,6 +16,7 @@
   var next = document.getElementById('next-button');
   var back = document.getElementById('back-button');
   var timer;
+  var COUNTRIES = ['Afghanistan','Albania','Algeria','Andorra','Angola','Antigua and Barbuda','Argentina','Armenia','Australia','Austria','Azerbaijan','Bahamas','Bahrain','Bangladesh','Barbados','Belarus','Belgium','Belize','Benin','Bhutan','Bolivia','Bosnia and Herzegovina','Botswana','Brazil','Brunei','Bulgaria','Burkina Faso','Burundi','Cabo Verde','Cambodia','Cameroon','Canada','Central African Republic','Chad','Chile','China','Colombia','Comoros','Costa Rica','Côte d’Ivoire','Croatia','Cuba','Cyprus','Czechia','Democratic Republic of the Congo','Denmark','Djibouti','Dominica','Dominican Republic','Ecuador','Egypt','El Salvador','Equatorial Guinea','Eritrea','Estonia','Eswatini','Ethiopia','Fiji','Finland','France','Gabon','Gambia','Georgia','Germany','Ghana','Greece','Grenada','Guatemala','Guinea','Guinea-Bissau','Guyana','Haiti','Honduras','Hungary','Iceland','India','Indonesia','Iran','Iraq','Ireland','Israel','Italy','Jamaica','Japan','Jordan','Kazakhstan','Kenya','Kiribati','Kuwait','Kyrgyzstan','Laos','Latvia','Lebanon','Lesotho','Liberia','Libya','Liechtenstein','Lithuania','Luxembourg','Madagascar','Malawi','Malaysia','Maldives','Mali','Malta','Marshall Islands','Mauritania','Mauritius','Mexico','Micronesia','Moldova','Monaco','Mongolia','Montenegro','Morocco','Mozambique','Myanmar','Namibia','Nauru','Nepal','Netherlands','New Zealand','Nicaragua','Niger','Nigeria','North Korea','North Macedonia','Norway','Oman','Pakistan','Palau','Palestine','Panama','Papua New Guinea','Paraguay','Peru','Philippines','Poland','Portugal','Qatar','Republic of the Congo','Romania','Russia','Rwanda','Saint Kitts and Nevis','Saint Lucia','Saint Vincent and the Grenadines','Samoa','San Marino','São Tomé and Príncipe','Saudi Arabia','Senegal','Serbia','Seychelles','Sierra Leone','Singapore','Slovakia','Slovenia','Solomon Islands','Somalia','South Africa','South Korea','South Sudan','Spain','Sri Lanka','Sudan','Suriname','Sweden','Switzerland','Syria','Taiwan','Tajikistan','Tanzania','Thailand','Timor-Leste','Togo','Tonga','Trinidad and Tobago','Tunisia','Türkiye','Turkmenistan','Tuvalu','Uganda','Ukraine','United Arab Emirates','United Kingdom','United States','Uruguay','Uzbekistan','Vanuatu','Vatican City','Venezuela','Vietnam','Yemen','Zambia','Zimbabwe'];
 
   function read() {
     try {
@@ -84,6 +85,31 @@
         }
       });
     });
+  }
+
+  function buildCountryOptions() {
+    document.getElementById('country-options').innerHTML = COUNTRIES.map(function (country) {
+      return '<label><input type="checkbox" name="internationalCountries" value="' + clean(country) + '"><span>' + clean(country) + '</span></label>';
+    }).join('');
+  }
+
+  function updateMultiSelectSummaries() {
+    document.querySelectorAll('[data-multi-summary]').forEach(function (summary) {
+      var selected = Array.from(form.querySelectorAll('[name="' + summary.dataset.multiSummary + '"]:checked')).map(function (control) { return control.value; });
+      summary.textContent = selected.length ? (selected.length <= 2 ? selected.join(', ') : selected.length + ' options selected') : summary.dataset.emptyLabel;
+    });
+  }
+
+  function updateInternationalCountries() {
+    var panel = document.getElementById('international-countries');
+    var international = form.querySelector('[name="marketLocations"][value="International"]');
+    var active = services.indexOf(SOCIAL_SERVICE) !== -1 && international && international.checked;
+    panel.hidden = !active;
+    panel.querySelectorAll('input').forEach(function (control) { control.disabled = !active; });
+    if (!active) {
+      panel.classList.remove('is-invalid');
+      panel.querySelector('.choice-error').hidden = true;
+    }
   }
 
   function syncServiceCards() {
@@ -160,6 +186,7 @@
     socialBrief.hidden = !hasSocial;
     socialBrief.querySelectorAll('input, select, textarea').forEach(function (control) { control.disabled = !hasSocial; });
     setRequired('[data-branch-required]', hasSocial);
+    updateInternationalCountries();
     updateSoftwareFlow(hasSoftware);
 
     document.getElementById('software-card-number').textContent = hasSocial ? '06' : '01';
@@ -264,12 +291,11 @@
         ['Content production', data.contentSupply], ['Competitors', data.competitors],
         ['Brand files', files.social.length ? files.social : 'None'], ['Age range', data.audienceAge], ['Audience gender', data.audienceGender],
         ['Ideal client', data.idealClient], ['Customer types', data.customerTypes], ['Other customer type', data.otherCustomerType],
-        ['Audience pain points', data.audiencePainPoints], ['Markets', data.marketLocations], ['Other markets', data.otherMarkets],
+        ['Audience pain points', data.audiencePainPoints], ['Markets', data.marketLocations], ['International countries', data.internationalCountries],
         ['Buying motivations', data.buyingMotivations], ['Social media goals', data.socialGoals], ['Content types', data.contentTypes],
         ['Paid social', data.paidSocial], ['Success measures', data.socialSuccessMeasures], ['Content pillars', data.contentPillars],
-        ['Content references', data.contentReferences], ['Posting frequency', data.postingFrequency],
-        ['Preferred start date', data.socialStartDate], ['Content approver', data.approverName], ['Approver email', data.approverEmail],
-        ['Approver WhatsApp', data.approverWhatsApp], ['Approval turnaround', data.approvalTurnaround], ['Key dates', data.keyDates],
+        ['Approver', data.approverName], ['Approver email', data.approverEmail],
+        ['Approver WhatsApp', data.approverWhatsApp], ['Approval timeframe', data.approvalTurnaround], ['Key dates', data.keyDates],
         ['Content boundaries', data.contentBoundaries], ['Community management', data.communityGuidance]
       ]);
     }
@@ -338,7 +364,17 @@
     if (event.target.name === 'softwarePurpose' || event.target.name === 'contentReadiness' || event.target.name === 'domainStatus' || event.target.name === 'hostingStatus') {
       updateSoftwareFlow(services.indexOf(SOFTWARE_SERVICE) !== -1);
     }
+    if (event.target.name === 'marketLocations') updateInternationalCountries();
+    if (event.target.type === 'checkbox') updateMultiSelectSummaries();
     save();
+  });
+  document.querySelectorAll('.multi-select__search').forEach(function (search) {
+    search.addEventListener('input', function () {
+      var query = search.value.trim().toLowerCase();
+      search.parentElement.querySelectorAll('.multi-select__options label').forEach(function (label) {
+        label.hidden = label.textContent.toLowerCase().indexOf(query) === -1;
+      });
+    });
   });
   form.addEventListener('submit', function (event) { event.preventDefault(); });
   next.addEventListener('click', function () { if (validate()) { if (current === 3) finish(); else { current += 1; update(); } } });
@@ -366,6 +402,8 @@
   document.getElementById('print-button').addEventListener('click', function () { window.print(); });
   document.getElementById('view-summary').addEventListener('click', function () { current = 3; show('wizard'); update(); });
 
+  buildCountryOptions();
   restore();
+  updateMultiSelectSummaries();
   if (location.hash === '#onboarding') { show('wizard'); update(); }
 }());
